@@ -377,7 +377,7 @@ function App() {
             <P>
               Although this is inefficient compared to a simple counting
               algorithm it does provide a method to consistently count and label
-              the set of real numbers between 0 and 1.
+              the set of real numbers between zero and one.
             </P>
           </section>
 
@@ -444,8 +444,7 @@ function App() {
               <P>
                 My favorite part of this method is that it shows that every real
                 number between zero and one has a natural number reflected
-                representation. There is no real number in this set that cannot
-                be represented by a natural number.
+                representation.
               </P>
 
               <div className="h-48 overflow-scroll relative my-12">
@@ -497,9 +496,9 @@ function App() {
 
             <P>
               This simplistic example shows how the mirror could function. On
-              one side is a real number between 0 and 1. On the other is the
-              natural number reflection that represents this number. Every real
-              number entered has an equivalent natural number on the right.
+              one side is a real number between zero and one. On the other is
+              the natural number reflection that represents this number. Every
+              real number entered has an equivalent natural number on the right.
             </P>
 
             <InverseInput />
