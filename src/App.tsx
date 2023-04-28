@@ -183,9 +183,24 @@ function App() {
                 A similar question on math stackexchange:
               </A>
               . The accepted answer said: "natural numbers cannot be infinitely
-              long". Does this mean the set of natural numbers is infinite
-              because there is an infinite amount of them, but each natural
-              number is finite?
+              long".
+            </P>
+
+            <P>
+              So the set of natural numbers is infinite, but each natural number
+              in the set is not, each natural number has a finite set of digits.
+            </P>
+
+            <P>
+              In response to the formula, So 1/3 returns a real number 0.3...,
+              and this real number has infinite digits. Since natural numbers
+              have finite digits, there is no way to represent this number.
+            </P>
+
+            <P>
+              A formula like x*10+3 where x = x+3 starting at 0, returns an
+              infinite set of natural numbers, not an actual natural number: [3,
+              33, 333, 3333, 33333, 333333, ...].
             </P>
           </section>
 
