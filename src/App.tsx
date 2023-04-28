@@ -177,6 +177,16 @@ function App() {
                 </span>
               </li>
             </ul>
+
+            <P>
+              <A href="https://math.stackexchange.com/a/460479/1175828">
+                A similar question on math stackexchange:
+              </A>
+              . The accepted answer said: "natural numbers cannot be infinitely
+              long". Does this mean the set of natural numbers is infinite
+              because there is an infinite amount of them, but each natural
+              number is finite?
+            </P>
           </section>
 
           <section id="background">
