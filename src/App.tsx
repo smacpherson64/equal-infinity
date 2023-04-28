@@ -254,7 +254,7 @@ function App() {
               </P>
 
               <figure className="block">
-                <img src="/tree.png" />
+                <img src="tree.png" />
 
                 <caption className="text-xs block text-left py-2">
                   <span className="opacity-80">Original picture from </span>
