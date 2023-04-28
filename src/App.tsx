@@ -128,6 +128,59 @@ function App() {
 
           <section id="background">
             <header>
+              <H2>Update</H2>
+            </header>
+
+            <P>
+              Shared this on{' '}
+              <A href="https://news.ycombinator.com/item?id=35726944">
+                hacker news
+              </A>{' '}
+              and had some excellent feedback. The glaring problem with the
+              first conclusion, and especially the mirror method, was irrational
+              numbers. These numbers never stop getting bigger.
+            </P>
+
+            <P>
+              I thought the responses resolved this for me, it made sense
+              however a few things still bother me:
+            </P>
+
+            <ul className="list-disc ml-12 leading-2 my-4">
+              <li>
+                <Bold>The meaningful symbols overlap</Bold>:{' '}
+                <span>
+                  For digits both sets use only 0-9. Real numbers have a
+                  decimal, but since it starts with a 0. It can be dropped
+                  without meaningful loss (unless the number starts with zero
+                  E.G: 0.001).{' '}
+                </span>
+              </li>
+              <li>
+                <Bold>Both sets are infinite</Bold>:{' '}
+                <span>
+                  The ends of both sets are infinite. E.G. The example of 1/3 =
+                  .3∞3 (This symbol is made up to express it goes on with 3
+                  forever .333333333...) could be represented by 3∞3 using the
+                  formula x*10+3. The natural number keeps going as well.
+                </span>
+              </li>
+              <li>
+                <Bold>
+                  Each irrational number in this set does not exhaust more than
+                  one natural number.
+                </Bold>
+                :{' '}
+                <span>
+                  There is no point where an irrational number takes up more
+                  than one natural number equivalent.
+                </span>
+              </li>
+            </ul>
+          </section>
+
+          <section id="background">
+            <header>
               <H2>Background</H2>
             </header>
 
