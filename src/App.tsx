@@ -1,118 +1,19 @@
-import {useState, createElement, ComponentProps} from 'react'
-import {twMerge} from 'tailwind-merge'
-import Decimal from 'decimal.js'
+import { useState, createElement, ComponentProps } from "react";
+import { twMerge } from "tailwind-merge";
+import Decimal from "decimal.js";
 
-type As = keyof HTMLElementTagNameMap
-
-const tw = <A extends As>(className: string, as?: A) => {
-  return function Component(props: ComponentProps<A>) {
-    return createElement(as ?? 'div', {
-      ...props,
-      className: twMerge(className, props.className),
-    })
-  }
-}
-
-const TextLayout = tw('p-6 max-w-xl m-auto text-left')
-const FullWidthLayout = tw('p-6 m-auto text-left')
-const H1 = tw('text-2xl sm:text-3xl font-bold mb-2 mt-6')
-const H2 = tw('text-xl font-bold mb-2 mt-6')
-const H3 = tw('text-md font-bold mb-2 mt-6')
-const P = tw('mb-6')
-const Bold = tw('font-bold', 'strong')
-const A = tw(
-  'text-emerald-400 transition-colors hover:text-emerald-400/90',
-  'a',
-)
-const TR = tw('hover:bg-white/10', 'tr')
-const TD = tw('p-1', 'td')
-
-const inverse = (real: number | string) =>
-  real.toString().replace('0.', '').split('').reverse().join('')
-
-function InverseInput() {
-  const [number, setNumber] = useState(
-    Math.random().toString().replace('0.', ''),
-  )
-  return (
-    <div className="flex flex-col md:flex-row items-center md:items-center justify-between space-y-2 md:space-x-8 w-full text-left">
-      <div className="flex-1 w-full md:w-auto text-[17px] md:text-2xl">
-        <label htmlFor="real-number-input">Real number</label>
-        <div className="rounded p-4 bg-white/10 focus-within:ring-2 flex">
-          <span>0.</span>
-
-          <input
-            type="number"
-            id="real-number-input"
-            className="w-full focus:ring-0 border-0 bg-transparent focus:outline-none flex-1"
-            value={number}
-            onChange={(event) => {
-              // Remove non digits
-              const value = event.currentTarget.value.replace(/\D{1}/g, '')
-
-              // Remove trailing zeros, unless only zeros
-              const nextValue = /^0{1,}$/.test(value)
-                ? value
-                : value.replace(/0{1,}$/, '')
-
-              setNumber(nextValue)
-            }}
-          />
-        </div>
-      </div>
-
-      <div className="text-3xl md:text-[50px] leading-none">
-        <span aria-hidden className="hidden md:inline-block">
-          →
-        </span>
-        <span aria-hidden className="inline-block md:hidden">
-          ↓
-        </span>
-        <span className="sr-only">becomes</span>
-      </div>
-
-      <div className="flex-1 w-full md:w-auto max-sm:w-full text-[17px] md:text-2xl">
-        <span>Natural number (mirrored)</span>
-        <div className="rounded bg-white/10 p-4 bg-gray-700 focus-within:ring-2 w-full break-all">
-          {number.split('').reverse().join('') || <>&nbsp;</>}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-const getLevels = (maxLevel: number = 1) => {
-  const list: Number[] = []
-  let level = 1
-  let modifier = new Decimal(1)
-  let at = new Decimal(0)
-
-  while (level <= maxLevel) {
-    modifier = modifier.mul(new Decimal(0.1))
-    at = new Decimal(0)
-
-    while (true) {
-      at = at.add(modifier)
-
-      if (at.toNumber() < 1) {
-        if (!list.includes(at.toNumber())) {
-          list.push(at.toNumber())
-        }
-      } else {
-        break
-      }
-    }
-
-    level += 1
-  }
-
-  return list
-}
+////////////////////////////////
+// #region . Constants
+////////////////////////////////
 
 const data = getLevels(3).map((real, index) => ({
   real: real.toString(),
   natural: (index + 1).toString(),
-}))
+}));
+
+////////////////////////////////
+// #region . Main app
+////////////////////////////////
 
 function App() {
   return (
@@ -126,97 +27,187 @@ function App() {
             </H1>
           </header>
 
-          <section id="background">
+          <section className="mt-8">
             <header>
-              <H2>Update</H2>
+              <H2 className="bg-orange-500/5 border border-orange-500 px-4 py-2 -mx-4">
+                TDLR: I failed, it is not possible to map real numbers between 0
+                and 1 to natural numbers.
+              </H2>
+
+              <P>
+                My main misunderstanding was not understanding the different
+                types of numbers. The symbols are the same (E.G. digits between
+                0 - 1), but the type of numbers are not.
+              </P>
             </header>
 
-            <P>
-              Shared this on{' '}
-              <A href="https://news.ycombinator.com/item?id=35726944">
-                hacker news
-              </A>{' '}
-              and had some excellent feedback. The glaring problem with the
-              first conclusion, and especially the mirror method, was irrational
-              numbers. These numbers never stop getting bigger.
-            </P>
+            <div className="mt-8">
+              <P className="mb-0">Some lessons learned:</P>
 
-            <P>
-              I thought the responses resolved this for me, it made sense
-              however a few things still bother me:
-            </P>
+              <ul className="pl-12">
+                <li className="list-decimal">
+                  There are different types of numbers.
+                </li>
 
-            <ul className="list-disc ml-12 leading-2 my-4">
-              <li>
-                <Bold>The meaningful symbols overlap</Bold>:{' '}
-                <span>
-                  For digits both sets use only 0-9. Real numbers have a
-                  decimal, but since it starts with a 0. It can be dropped
-                  without meaningful loss (unless the number starts with zero
-                  E.G: 0.001).{' '}
-                </span>
-              </li>
-              <li>
-                <Bold>Both sets are infinite</Bold>:{' '}
-                <span>
-                  The ends of both sets are infinite. E.G. The example of 1/3 =
-                  .3∞3 (This symbol is made up to express it goes on with 3
-                  forever .333333333...) could be represented by 3∞3 using the
-                  formula x*10+3. The natural number keeps going as well.
-                </span>
-              </li>
-              <li>
-                <Bold>
-                  Each irrational number in this set does not exhaust more than
-                  one natural number.
-                </Bold>
-                :{' '}
-                <span>
-                  There is no point where an irrational number takes up more
-                  than one natural number equivalent.
-                </span>
-              </li>
-            </ul>
+                <li className="list-decimal">
+                  Natural numbers have finite digits.
+                </li>
 
-            <P>
-              <A href="https://math.stackexchange.com/a/460479/1175828">
-                A similar question on math stackexchange:
-              </A>
-              . The accepted answer said: "natural numbers cannot be infinitely
-              long".
-            </P>
+                <li className="list-decimal">
+                  Some real numbers can have infinite digits.
+                </li>
+              </ul>
 
-            <P>
-              So the set of natural numbers is infinite, but each natural number
-              in the set is not, each natural number has a finite set of digits.
-            </P>
+              <div className="w-full p-4 bg-slate-950 text-sm mt-8">
+                Different types of numbers:
+                <iframe
+                  className="aspect-video w-full my-4"
+                  src="https://www.youtube.com/watch?v=htYh-Tq7ZBI"
+                  frameBorder="0"
+                  title="Video on the different types of numbers"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+                <table className="w-full mt-2">
+                  <thead>
+                    <tr>
+                      <th>
+                        <strong>Examples</strong>
+                      </th>
+                      <th>
+                        <strong>Name</strong>
+                      </th>
+                      <th className="w-[8%]">
+                        <strong>+</strong>
+                      </th>
+                      <th className="w-[8%]">
+                        <strong>X</strong>
+                      </th>
+                      <th className="w-[8%]">
+                        <strong>-</strong>
+                      </th>
+                      <th className="w-[8%]">
+                        <strong>/</strong>
+                      </th>
+                      <th className="w-[8%]">
+                        <strong>^</strong>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>0,1,2,3,4,5</td>
+                      <td>ℕ - Natural</td>
+                      <td>ℕ</td>
+                      <td>ℕ</td>
+                      <td>ℤ</td>
+                      <td>Q</td>
+                      <td>ℕ</td>
+                    </tr>
+                    <tr>
+                      <td>-2,-1,0,1,2</td>
+                      <td>ℤ - Integers</td>
+                      <td>ℤ</td>
+                      <td>ℤ</td>
+                      <td>ℤ</td>
+                      <td>Q</td>
+                      <td>Q</td>
+                    </tr>
+                    <tr>
+                      <td>1/3</td>
+                      <td>Q - Rational</td>
+                      <td>Q</td>
+                      <td>Q</td>
+                      <td>Q</td>
+                      <td>Q</td>
+                      <td>C</td>
+                    </tr>
+                    <tr>
+                      <td>√5</td>
+                      <td>ℝ - Real</td>
+                      <td>ℝ</td>
+                      <td>ℝ</td>
+                      <td>ℝ</td>
+                      <td>ℝ</td>
+                      <td>C</td>
+                    </tr>
+                    <tr>
+                      <td>√-5</td>
+                      <td>C - Complex</td>
+                      <td>C</td>
+                      <td>C</td>
+                      <td>C</td>
+                      <td>C</td>
+                      <td>C</td>
+                    </tr>
+                    <tr>
+                      <td>(2.5, -3, 8.4)</td>
+                      <td>ℝ3 - 3D Vectors</td>
+                      <td>ℝ3</td>
+                      <td></td>
+                      <td>ℝ3</td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
 
-            <P>
-              In response to the formula, So 1/3 returns a real number 0.3...,
-              and this real number has infinite digits. Since natural numbers
-              have finite digits, there is no way to represent this number.
-            </P>
+            <div className="w-full p-4 bg-slate-950 text-sm mt-8">
+              <P>
+                <A href="https://math.stackexchange.com/a/460479/1175828">
+                  A similar question on math stack exchange:
+                </A>
+                . The accepted answer said: "natural numbers cannot be
+                infinitely long".
+              </P>
 
-            <P>
-              A formula like x*10+3 where x = x+3 starting at 0, returns an
-              infinite set of natural numbers, not an actual natural number: [3,
-              33, 333, 3333, 33333, 333333, ...].
-            </P>
+              <P>
+                So the set of natural numbers is infinite, but each natural
+                number in the set is not, each natural number has a finite set
+                of digits.
+              </P>
+
+              <P>
+                In response to the formula, So 1/3 returns a real number 0.3...,
+                and this real number has infinite digits. Since natural numbers
+                have finite digits, there is no way to represent this number.
+              </P>
+
+              <P>
+                A formula like x*10+3 where x = x+3 starting at 0, returns an
+                infinite set of natural numbers, not an actual natural number:
+                [3, 33, 333, 3333, 33333, 333333, ...].
+              </P>
+            </div>
+
+            <div className="w-full p-4 bg-slate-950 text-sm mt-8">
+              <P>
+                Originally shared this on{" "}
+                <A href="https://news.ycombinator.com/item?id=35726944">
+                  hacker news
+                </A>{" "}
+                and had some excellent feedback. The glaring problem with the
+                first conclusion, and especially the mirror method, was
+                irrational numbers. These numbers never stop getting bigger.
+              </P>
+            </div>
           </section>
 
-          <section id="background">
+          <section>
             <header>
-              <H2>Background</H2>
+              <H2>Original article:</H2>
             </header>
 
             <P>
-              I enjoy watching{' '}
+              I enjoy watching{" "}
               <A href="https://www.veritasium.com">Veritasium</A>'s math videos.
               His video "Math's Fundamental Flaw" is my easily favorite.
-              However, the explanation of{' '}
+              However, the explanation of{" "}
               <A href="https://en.wikipedia.org/wiki/Cantor's_diagonal_argument">
                 Cantor's Diagonalization Argument
-              </A>{' '}
+              </A>{" "}
               consistently bothers me. It comes in at around 4m and 30s in the
               video.
             </P>
@@ -245,11 +236,11 @@ function App() {
 
             <ul className="list-disc ml-12 leading-2 my-4">
               <li>
-                <Bold>Prepend 0 after the decimal</Bold>:{' '}
+                <Bold>Prepend 0 after the decimal</Bold>:{" "}
                 <span>0.1, 0.01, 0.001, 0.0001, 0.00001, ...</span>
               </li>
               <li>
-                <Bold>Append .9</Bold>:{' '}
+                <Bold>Append .9</Bold>:{" "}
                 <span>0.9, 0.99, 0.999, 0.9999, 0.99999, ...</span>
               </li>
             </ul>
@@ -295,10 +286,11 @@ function App() {
                   <Bold>
                     <A
                       className="text-md"
-                      href="https://en.wikipedia.org/wiki/Depth-first_search">
+                      href="https://en.wikipedia.org/wiki/Depth-first_search"
+                    >
                       Depth-first search
                     </A>
-                  </Bold>{' '}
+                  </Bold>{" "}
                   - Follow each branch as deeply as possible counting all sub
                   branches until there are no sub branches left. After each
                   branch is exhausted move on to the next available branch. Do
@@ -308,10 +300,11 @@ function App() {
                   <Bold>
                     <A
                       className="text-md"
-                      href="https://en.wikipedia.org/wiki/Breadth-first_search">
+                      href="https://en.wikipedia.org/wiki/Breadth-first_search"
+                    >
                       Breadth-first search
                     </A>
-                  </Bold>{' '}
+                  </Bold>{" "}
                   - Follow only the immediately connected branches to the
                   current branch (or ground). Once all immediately connected
                   branches are counted, go to the next level down of branches
@@ -485,18 +478,20 @@ function App() {
                         <TR key={item.real}>
                           <TD
                             className={
-                              index % 2 === 0 ? 'bg-white/5' : 'bg-transparent'
-                            }>
+                              index % 2 === 0 ? "bg-white/5" : "bg-transparent"
+                            }
+                          >
                             {item.natural}:
                           </TD>
                           <TD
                             className={
-                              index % 2 === 0 ? 'bg-white/5' : 'bg-transparent'
-                            }>
+                              index % 2 === 0 ? "bg-white/5" : "bg-transparent"
+                            }
+                          >
                             {item.real}
                           </TD>
                         </TR>
-                      )
+                      );
                     })}
                     <TR>
                       <TD>...</TD>
@@ -540,18 +535,20 @@ function App() {
                         <TR key={item.real}>
                           <TD
                             className={
-                              index % 2 === 0 ? 'bg-white/5' : 'bg-transparent'
-                            }>
+                              index % 2 === 0 ? "bg-white/5" : "bg-transparent"
+                            }
+                          >
                             {inverse(item.real)}
                           </TD>
                           <TD
                             className={
-                              index % 2 === 0 ? 'bg-white/5' : 'bg-transparent'
-                            }>
+                              index % 2 === 0 ? "bg-white/5" : "bg-transparent"
+                            }
+                          >
                             {item.real}
                           </TD>
                         </TR>
-                      )
+                      );
                     })}
                     <TR>
                       <TD>...</TD>
@@ -598,7 +595,127 @@ function App() {
         </TextLayout>
       </article>
     </main>
-  )
+  );
 }
 
-export default App
+export default App;
+
+////////////////////////////////
+// #region . Helpers
+////////////////////////////////
+
+// =============================
+// #region .. styling
+// =============================
+
+type As = keyof HTMLElementTagNameMap;
+
+const tw = <A extends As>(className: string, as?: A) => {
+  return function Component(props: ComponentProps<A>) {
+    return createElement(as ?? "div", {
+      ...props,
+      className: twMerge(className, props.className),
+    });
+  };
+};
+
+const TextLayout = tw("p-6 max-w-xl m-auto text-left");
+const FullWidthLayout = tw("p-6 m-auto text-left");
+const H1 = tw("text-2xl sm:text-3xl font-bold mb-2 mt-6");
+const H2 = tw("text-xl font-bold mb-2 mt-6");
+const H3 = tw("text-md font-bold mb-2 mt-6");
+const P = tw("mb-6");
+const Bold = tw("font-bold", "strong");
+const A = tw(
+  "text-emerald-400 transition-colors hover:text-emerald-400/90",
+  "a"
+);
+const TR = tw("hover:bg-white/10", "tr");
+const TD = tw("p-1", "td");
+
+// =============================
+// #region .. util functions
+// =============================
+
+function inverse(real: number | string) {
+  return real.toString().replace("0.", "").split("").reverse().join("");
+}
+
+function InverseInput() {
+  const [number, setNumber] = useState(
+    Math.random().toString().replace("0.", "")
+  );
+  return (
+    <div className="flex flex-col md:flex-row items-center md:items-center justify-between space-y-2 md:space-x-8 w-full text-left">
+      <div className="flex-1 w-full md:w-auto text-[17px] md:text-2xl">
+        <label htmlFor="real-number-input">Real number</label>
+        <div className="rounded p-4 bg-white/10 focus-within:ring-2 flex">
+          <span>0.</span>
+
+          <input
+            type="number"
+            id="real-number-input"
+            className="w-full focus:ring-0 border-0 bg-transparent focus:outline-none flex-1"
+            value={number}
+            onChange={(event) => {
+              // Remove non digits
+              const value = event.currentTarget.value.replace(/\D{1}/g, "");
+
+              // Remove trailing zeros, unless only zeros
+              const nextValue = /^0{1,}$/.test(value)
+                ? value
+                : value.replace(/0{1,}$/, "");
+
+              setNumber(nextValue);
+            }}
+          />
+        </div>
+      </div>
+
+      <div className="text-3xl md:text-[50px] leading-none">
+        <span aria-hidden className="hidden md:inline-block">
+          →
+        </span>
+        <span aria-hidden className="inline-block md:hidden">
+          ↓
+        </span>
+        <span className="sr-only">becomes</span>
+      </div>
+
+      <div className="flex-1 w-full md:w-auto max-sm:w-full text-[17px] md:text-2xl">
+        <span>Natural number (mirrored)</span>
+        <div className="rounded bg-white/10 p-4 bg-gray-700 focus-within:ring-2 w-full break-all">
+          {number.split("").reverse().join("") || <>&nbsp;</>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function getLevels(maxLevel: number = 1) {
+  const list: Number[] = [];
+  let level = 1;
+  let modifier = new Decimal(1);
+  let at = new Decimal(0);
+
+  while (level <= maxLevel) {
+    modifier = modifier.mul(new Decimal(0.1));
+    at = new Decimal(0);
+
+    while (true) {
+      at = at.add(modifier);
+
+      if (at.toNumber() < 1) {
+        if (!list.includes(at.toNumber())) {
+          list.push(at.toNumber());
+        }
+      } else {
+        break;
+      }
+    }
+
+    level += 1;
+  }
+
+  return list;
+}

@@ -1,4 +1,6 @@
 :root {
+  @apply bg-slate-900;
+
   font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui,
     helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial,
     sans-serif;
@@ -7,7 +9,6 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
