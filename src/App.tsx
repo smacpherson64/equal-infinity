@@ -62,9 +62,9 @@ function App() {
                 Different types of numbers:
                 <iframe
                   className="aspect-video w-full my-4"
-                  src="https://www.youtube.com/watch?v=htYh-Tq7ZBI"
+                  src="https://www.youtube.com/embed/htYh-Tq7ZBI?si=9aijG7roZYIIHEKQ"
                   frameBorder="0"
-                  title="Video on the different types of numbers"
+                  title="Why can't I multiply matrices"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                 />
